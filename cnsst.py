@@ -195,7 +195,6 @@ class CNSST:
 
     
     def fast_plot(self):
-        """a fast way for plotting result by using mean pixel value of cluster"""
         self.image = np.zeros((self.y_axis, self.x_axis, 3),dtype=np.uint8)
         _x = rearrange(self.F, self.array[:,0]) # row
         _y = rearrange(self.F, self.array[:,1]) # column
