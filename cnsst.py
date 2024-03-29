@@ -8,7 +8,7 @@
 # CNSST: Clustering algorithm based on Network signal transformation, Sorting, Signal contrast and Threshold filtering
 
 # How to use:
-# # Example for reviwers
+# # Example
 # # --------------------
 # from PIL import Image
 # path = eval(input())
@@ -62,9 +62,7 @@ class CNSST:
         
         
     def cluster(self):
-        """algorithm for clusters’ construction"""
         self.threshold = float(self.Y_increment_function_2[self.threshold_index])
-
         self.clusters=[[0]]
         for i in range(1, (len(self.Y_increment_function_1))):
             if (self.Y_increment_function_1[i-1]-self.threshold)*(self.Y_increment_function_1[i]-self.threshold) > 0:
@@ -84,7 +82,6 @@ class CNSST:
                 self.clusters[len(self.clusters)-1].append(i)  
     
     def cluster_edge(self):
-        """A more sensitive mode for buiding clusters"""
         self.threshold = float(self.Y_increment_function_2[self.threshold_index])
 
         self.clusters=[[0]]
@@ -113,26 +110,23 @@ class CNSST:
         self._labels = np.reshape(self.labels, (h*w))
         
     def __F_function(self, array_):
-        """network signal transformation"""
         self.f_1 = (np.sqrt((array_[:,3]+1)*(array_[:,3]+1)+(array_[:,4]+1)*(array_[:,4]+1))/np.sqrt((array_[:,2]+1)*(array_[:,2]+1)+(array_[:,3]+1)*(array_[:,3]+1)+(array_[:,4]+1)*(array_[:,4]+1)))*(np.sqrt((array_[:,2]+1)*(array_[:,2]+1))/np.sqrt((array_[:,2]+1)*(array_[:,2]+1)+(array_[:,3]+1)*(array_[:,3]+1)))
         self.f_2 = (np.sqrt((1.28*array_[:,2]+1)*(1.28*array_[:,2]+1)+(array_[:,4]+1)*(array_[:,4]+1))/np.sqrt((1.28*array_[:,2]+1)*(1.28*array_[:,2]+1)+(array_[:,3]+1)*(array_[:,3]+1)+(array_[:,4]+1)*(array_[:,4]+1)))*(np.sqrt((array_[:,3]+1)*(array_[:,3]+1))/np.sqrt((array_[:,3]+1)*(array_[:,3]+1)+(array_[:,4]+1)*(array_[:,4]+1)))*2
         self.f_3 = (np.sqrt((1.22*array_[:,2]+1)*(1.22*array_[:,2]+1)+(array_[:,3]+1)*(array_[:,3]+1))/np.sqrt((1.22*array_[:,2]+1)*(1.22*array_[:,2]+1)+(array_[:,3]+1)*(array_[:,3]+1)+(array_[:,4]+1)*(array_[:,4]+1)))*(np.sqrt((array_[:,4]+1)*(array_[:,4]+1))/np.sqrt((1.22*array_[:,2]+1)*(1.22*array_[:,2]+1)+(array_[:,4]+1)*(array_[:,4]+1)))
         self.F = self.f_1*self.f_1*self.f_1+self.f_2*self.f_2*self.f_2+self.f_3*self.f_3*self.f_3
         
     def diff(self):
-        """Signal contrast"""
         self.Y_increment_function_1 = [(lambda a, b  : a-b)(self.F_sorted[i], self.F_sorted[i-1]) for i in range(1,len(self.F_sorted))]
         # add 0 in front of list, because lenghth of Y_increment_function_1 is less than F_sorted by one
         self.Y_increment_function_1.insert(0,0)
         
     def diff_edge(self):
-        """Signal contrast for edge detection"""
         self.Y_increment_function_1 = [(lambda a, b  : abs(a-b))(self.F_sorted[i], self.F_sorted[i-1]) for i in range(1,len(self.F_sorted))]
         # add 0 in front of list, because lenghth of Y_increment_function_1 is less than F_sorted by one
         self.Y_increment_function_1.insert(0,0)
         
     def edge(self):
-        for m in range(0, self.y_axis): # horizontal direction
+        for m in range(0, self.y_axis): 
             self.r_or_col = self.array[np.where(self.array[:,0]== m)].copy()  # select m-th row
             self.run_edge()
             self.edge_horizontal_direction = self.edge_cluster # edge cluster of horizontal direction for every loop
@@ -140,7 +134,7 @@ class CNSST:
             self.plot_edge(self.F, self.edge_horizontal_direction, self.r_or_col)
             
             
-        for n in range(0, self.x_axis): # vertical direction
+        for n in range(0, self.x_axis): 
             self.r_or_col = self.array[np.where(self.array[:,1]== n )].copy() # select n-th column
             self.run_edge()
             self.edge_vertical_direction = self.edge_cluster # edge cluster of vertical direction for every loop
@@ -151,10 +145,6 @@ class CNSST:
         return self
     
     def plot_edge(self, F, edge_cluster, data):
-        """F: clustering_e.F
-           edge_cluster:  self.edge_horizontal_direction or self.edge_vertical_direction
-           
-        """
         _x_ = rearrange(F, data[:,0]).copy() # row
         _y_ = rearrange(F, data[:,1]).copy() # column
         for m in range(0,len(edge_cluster)):
@@ -166,7 +156,6 @@ class CNSST:
         self.F_sorted = np.sort(self.F, axis = None)
         
     def thresh_(self):
-        """determination of threshold for constructing clusters """
         self.Y_increment_function_2 = sorted(self.Y_increment_function_1).copy()
         for i in range(0, len(self.Y_increment_function_2)):
             if self.Y_increment_function_2[i]>0:
@@ -229,7 +218,6 @@ class CNSST:
         
 
 def position_index(arg): 
-    """return position index of given arg"""
     if isinstance(arg, (np.ndarray)) == False:
         raise ValueError("input must be array")
     h, w, d = arg.shape
@@ -247,8 +235,6 @@ def position_index(arg):
     return np.hstack((position_index,array_1))
 
 def rearrange(arg_1, arg_2):
-    # arg_1 - row vector to sort (step 1)
-    # arg_2 - row vector to rearrange according to step 1
     if isinstance(arg_1, (np.ndarray)) == False:
         raise ValueError("input must be array")
     if isinstance(arg_2, (np.ndarray)) == False:
