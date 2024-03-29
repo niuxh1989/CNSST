@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
-# author: Niu Xinghao
+# author: Niu Xinghao, 
+#         Ph.D. student
+#         Department of Economic informatics
+#         Faculty of Economics
+#         Moscow State University
+
 # In[ ]:
 
 
