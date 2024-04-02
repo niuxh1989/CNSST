@@ -7,8 +7,8 @@
 import os
 os.chdir(r'/content/sample_data')
 from google.colab import files
-image = files._upload_file() # specify file name
-
+image = files._upload_file() # specify image name
+---------------------------------------------------
 ! pip install sklearn_som
 ! pip install cvi
 
