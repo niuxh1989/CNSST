@@ -28,10 +28,6 @@ class CNSST:
         sort_col: flag to determine whether to sort column
         i_column: index of column to be sorted
         seed_ : seed for sorting column
-
-        Returns
-        -------
-        self.f__labels__ : clustering result, ndarray
         """
         # change negative number
         for i in range(0, len(X[0])):
